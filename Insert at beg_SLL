@@ -1,0 +1,35 @@
+//Inserting a node at the beginning of SLL
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+	int data;
+	struct Node *next;
+};
+//Function to insert a node at the beginning
+struct Node *insertatBeg(struct Node *head, int value) {
+	struct Node *newNode=(struct Node*)malloc(sizeof(struct Node));
+	newNode->data=value;
+	newNode->next=head;
+	head=newNode;
+	return head;
+}
+void printlinkedList(struct Node *head) {
+	struct Node *current=head;
+	while(current!=NULL) {
+		printf("%d ", current->data);
+		current=current->next;
+	}
+	printf("NULL\n");
+}
+int main() {
+	struct Node *head=NULL;
+	head=insertatBeg(head, 75);
+	head=insertatBeg(head, 50);
+	head=insertatBeg(head, 25);
+	printf("Original list: ");
+	printlinkedList(head);
+	head=insertatBeg(head, 100);
+	printf("New list: ");
+	printlinkedList(head);
+	return 0;
+}
