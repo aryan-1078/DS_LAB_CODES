@@ -1,0 +1,54 @@
+//Deleting last node of the SLL
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+	int data;
+	struct Node *next;
+};
+struct Node *delLastNode(struct Node *head) {
+	if(head==NULL) {
+		printf("Linked list is empty. Cannot delete the last node\n");
+		return NULL;
+	}
+	if(head->next==NULL) {
+		free(head);
+		return NULL;
+	}
+	struct Node *current=head;
+	struct Node *prev=NULL;
+	while(current->next!=NULL) {
+		prev=current;
+		current=current->next;
+	}
+	prev->next=NULL;
+	free(current);
+	return head;
+}
+void printList(struct Node *head) {
+	struct Node *current=head;
+	while(current!=NULL) {
+		printf("%d ", current->data);
+		current=current->next;
+	}
+	printf("NULL\n");
+}
+int main() {
+	struct Node *head=NULL;
+	struct Node *second=NULL;
+	struct Node *third=NULL;
+	head=(struct Node*)malloc(sizeof(struct Node));
+	second=(struct Node*)malloc(sizeof(struct Node));
+	third=(struct Node*)malloc(sizeof(struct Node));
+	head->data=25;
+	head->next=second;
+	second->data=50;
+	second->next=third;
+	third->data=75;
+	third->next=NULL;
+	printf("Original list: ");
+	printList(head);
+	head=delLastNode(head);
+	printf("New list: ");
+	printList(head);
+	return 0;
+}
