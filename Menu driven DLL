@@ -1,0 +1,188 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define a structure for a doubly linked list node
+struct Node {
+    int data;
+    struct Node* prev;
+    struct Node* next;
+};
+
+// Function to create a new node with the given data
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to display the doubly linked list in forward direction
+void displayForward(struct Node* head) {
+    struct Node* current = head;
+    while (current != NULL) {
+        printf("%d -> ", current->data);
+        current = current->next;
+    }
+    printf("NULL\n");
+}
+
+// Function to display the doubly linked list in reverse direction
+void displayBackward(struct Node* tail) {
+    struct Node* current = tail;
+    while (current != NULL) {
+        printf("%d -> ", current->data);
+        current = current->prev;
+    }
+    printf("NULL\n");
+}
+
+// Function to insert a new node at the end of the doubly linked list
+struct Node* insertEnd(struct Node* head, int data) {
+    struct Node* newNode = createNode(data);
+    if (head == NULL) {
+        return newNode;
+    }
+    struct Node* current = head;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+    current->next = newNode;
+    newNode->prev = current;
+    return head;
+}
+
+// Function to delete a node with the given data from the doubly linked list
+struct Node* deleteNode(struct Node* head, int data) {
+    if (head == NULL) {
+        return NULL;
+    }
+    if (head->data == data) {
+        struct Node* temp = head->next;
+        if (temp != NULL) {
+            temp->prev = NULL;
+        }
+        free(head);
+        return temp;
+    }
+    struct Node* current = head;
+    while (current != NULL && current->data != data) {
+        current = current->next;
+    }
+    if (current != NULL) {
+        struct Node* prev = current->prev;
+        struct Node* next = current->next;
+        if (prev != NULL) {
+            prev->next = next;
+        }
+        if (next != NULL) {
+            next->prev = prev;
+        }
+        free(current);
+    }
+    return head;
+}
+
+// Function to reverse the doubly linked list
+struct Node* reverseList(struct Node* head) {
+    struct Node* temp = NULL;
+    struct Node* current = head;
+    while (current != NULL) {
+        temp = current->prev;
+        current->prev = current->next;
+        current->next = temp;
+        current = current->prev;
+    }
+    if (temp != NULL) {
+        head = temp->prev;
+    }
+    return head;
+}
+
+// Function to concatenate two doubly linked lists
+struct Node* concatenateLists(struct Node* list1, struct Node* list2) {
+    if (list1 == NULL) {
+        return list2;
+    }
+    if (list2 == NULL) {
+        return list1;
+    }
+
+    struct Node* current = list1;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+    current->next = list2;
+    list2->prev = current;
+    return list1;
+}
+
+int main() {
+    struct Node* head = NULL;
+    struct Node* tail = NULL;
+    int choice, data;
+
+    do {
+        printf("\nDoubly Linked List Operations Menu:\n");
+        printf("1. Insert at the end\n");
+        printf("2. Delete a node\n");
+        printf("3. Reverse the list\n");
+        printf("4. Concatenate lists\n");
+        printf("5. Display list (Forward)\n");
+        printf("6. Display list (Backward)\n");
+        printf("7. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter data to insert: ");
+                scanf("%d", &data);
+                head = insertEnd(head, data);
+                if (tail == NULL) {
+                    tail = head;
+                }
+                break;
+            case 2:
+                printf("Enter data to delete: ");
+                scanf("%d", &data);
+                head = deleteNode(head, data);
+                break;
+            case 3:
+                head = reverseList(head);
+                printf("List reversed.\n");
+                break;
+            case 4: {
+                struct Node* list2 = NULL;
+                int num, value;
+                printf("Enter the number of elements for the second list: ");
+                scanf("%d", &num);
+                for (int i = 0; i < num; i++) {
+                    printf("Enter data for the second list: ");
+                    scanf("%d", &value);
+                    list2 = insertEnd(list2, value);
+                    if (tail == NULL) {
+                        tail = list2;
+                    }
+                }
+                head = concatenateLists(head, list2);
+                printf("Lists concatenated.\n");
+                break;
+            }
+            case 5:
+                printf("Current List (Forward): ");
+                displayForward(head);
+                break;
+            case 6:
+                printf("Current List (Backward): ");
+                displayBackward(tail);
+                break;
+            case 7:
+                printf("Exiting the program. Goodbye!\n");
+                break;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    } while (choice != 7);
+    return 0;
+}
