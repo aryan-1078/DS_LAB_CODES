@@ -1,0 +1,50 @@
+//To find intersection of two SLL
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct node {
+	int data;
+	struct node *next;
+} Node;
+Node *insertAtBeg(Node *head, int value) {
+	Node *newNode = (Node *)malloc(sizeof(Node));
+	newNode->data=value;
+	newNode->next=head;
+	head=newNode;
+	return head;
+}
+void printList(Node *head) {
+	while(head!=NULL) {
+		printf("%d ", head->data);
+		head=head->next;
+	}
+	printf("\n");
+}
+Node *findIntersection(Node *head1, Node *head2) {
+	Node *intersectionList=NULL;
+	while(head1!=NULL) {
+		Node *temp=head2;
+		while(temp!=NULL) {
+			if(head1->data==temp->data) {
+				intersectionList=insertAtBeg(intersectionList, head1->data);
+				break;
+			}
+			temp=temp->next;
+		}
+		head1=head1->next;
+	}
+	return intersectionList;
+}
+int main() {
+	Node *head1=NULL;
+	Node *head2=NULL;
+	head1=insertAtBeg(head1, 25);
+	head1=insertAtBeg(head1, 65);
+	head1=insertAtBeg(head1, 70);
+	head2=insertAtBeg(head2, 50);
+	head2=insertAtBeg(head2, 25);
+	head2=insertAtBeg(head2, 35);
+	Node *intersectionList=findIntersection(head1, head2);
+	printf("Intersection of two linked lists: ");
+	printList(intersectionList);
+	return 0;
+}
