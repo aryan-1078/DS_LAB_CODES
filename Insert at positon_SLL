@@ -1,0 +1,50 @@
+//Insert at any position
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+	int data;
+	struct Node *next;
+};
+//Function to insert a node at any position
+struct Node *insertAtPosition(struct Node *head, int value, int position) {
+	int i;
+	struct Node *newNode=(struct Node*)malloc(sizeof(struct Node));
+	newNode->data=value;
+	newNode->next=NULL;
+	if(position==1) {
+		newNode->next=head;
+		return newNode;
+	} else {
+		struct Node *current=head;
+		for(i=1; i<position-1 && current!=NULL; i++) {
+			current=current->next;
+		}
+		if(current=NULL) {
+			printf("Invalid position. No node inserted");
+			return head;
+		}
+		newNode->next=current->next;
+		current->next=newNode;
+		return head;
+	}
+}
+void printLinkedList(struct Node *head) {
+	struct Node *current=head;
+	while(current!=NULL) {
+		printf("%d ", current->data);
+		current=current->next;
+    }
+    printf("NULL\n");
+}
+int main() {
+	struct Node *head=NULL;
+	head=insertAtPosition(head, 25, 1);
+	head=insertAtPosition(head, 50, 2);
+	head=insertAtPosition(head, 75, 3);
+	printf("Original list: ");
+	printLinkedList(head);
+	head=insertAtPosition(head, 100, 2);
+	printf("New list: ");
+	printLinkedList(head);
+	return 0;
+}
