@@ -1,0 +1,91 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Structure for a node in the doubly linked list
+struct Node {
+    int data;
+    struct Node* prev;
+    struct Node* next;
+};
+
+// Function to create a new node
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed.\n");
+        exit(1);
+    }
+    newNode->data = data;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to insert a node at the end of a doubly linked list
+void insertAtEnd(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+    } else {
+        struct Node* current = *head;
+        while (current->next != NULL) {
+            current = current->next;
+        }
+        current->next = newNode;
+        newNode->prev = current;
+    }
+}
+
+// Function to find the intersection of two doubly linked lists
+struct Node* findIntersection(struct Node* list1, struct Node* list2) {
+    struct Node* intersectionList = NULL;
+    struct Node* current1 = list1;
+    while (current1 != NULL) {
+        struct Node* current2 = list2;
+        while (current2 != NULL) {
+            if (current1->data == current2->data) {
+                insertAtEnd(&intersectionList, current1->data);
+                break; // Once a match is found, we can break inner loop
+            }
+            current2 = current2->next;
+        }
+        current1 = current1->next;
+    }
+    return intersectionList;
+}
+
+// Function to print a doubly linked list
+void printList(struct Node* head) {
+    struct Node* current = head;
+    while (current != NULL) {
+        printf("%d -> ", current->data);
+        current = current->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    struct Node* list1 = NULL;
+    struct Node* list2 = NULL;
+
+    // Insert elements into the first doubly linked list
+    insertAtEnd(&list1, 1);
+    insertAtEnd(&list1, 2);
+    insertAtEnd(&list1, 3);
+
+    // Insert elements into the second doubly linked list
+    insertAtEnd(&list2, 3);
+    insertAtEnd(&list2, 4);
+    insertAtEnd(&list2, 5);
+
+    printf("List 1: ");
+    printList(list1);
+    printf("List 2: ");
+    printList(list2);
+
+    struct Node* intersectionList = findIntersection(list1, list2);
+    printf("Intersection of List 1 and List 2: ");
+    printList(intersectionList);
+
+    return 0;
+}
