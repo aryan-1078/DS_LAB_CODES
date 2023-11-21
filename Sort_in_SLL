@@ -1,0 +1,97 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define a structure for a node in the linked list
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Function to insert a new node with a given value at the end of the linked list
+struct Node* insertEnd(struct Node* head, int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = NULL;
+
+    if (head == NULL) {
+        // If the list is empty, the new node becomes the head
+        head = newNode;
+    } else {
+        // Otherwise, traverse the list and add the new node at the end
+        struct Node* current = head;
+        while (current->next != NULL) {
+            current = current->next;
+        }
+        current->next = newNode;
+    }
+
+    return head;
+}
+
+// Function to perform bubble sort on the linked list in ascending order
+struct Node* bubbleSort(struct Node* head) {
+    int swapped;
+    struct Node* current;
+    struct Node* lastSorted = NULL;
+
+    // If the list is empty or has only one element, it is already sorted
+    if (head == NULL || head->next == NULL) {
+        return head;
+    }
+
+    do {
+        swapped = 0;
+        current = head;
+
+        while (current->next != lastSorted) {
+            if (current->data > current->next->data) {
+                // Swap the data of current and next nodes
+                int temp = current->data;
+                current->data = current->next->data;
+                current->next->data = temp;
+
+                swapped = 1;
+            }
+            current = current->next;
+        }
+        lastSorted = current;
+
+    } while (swapped);
+
+    return head;
+}
+
+// Function to print the linked list
+void printList(struct Node* head) {
+    struct Node* current = head;
+    while (current != NULL) {
+        printf("%d ", current->data);
+        current = current->next;
+    }
+    printf("\n");
+}
+
+// Main function to test the bubble sort on the linked list
+int main() {
+    struct Node* head = NULL;
+
+    // Insert nodes with values 30, 10, 50, 20, and 40
+    head = insertEnd(head, 30);
+    head = insertEnd(head, 10);
+    head = insertEnd(head, 50);
+    head = insertEnd(head, 20);
+    head = insertEnd(head, 40);
+
+    // Print the original linked list
+    printf("Original Linked List: ");
+    printList(head);
+
+    // Perform bubble sort on the linked list
+    head = bubbleSort(head);
+
+    // Print the sorted linked list
+    printf("Sorted Linked List: ");
+    printList(head);
+
+    return 0;
+}
